@@ -4,6 +4,24 @@ func! rsth#Heading()
     let l:row = l:curPos[1]
     let l:col = l:curPos[2]
 
+    if s:MatchHeadLine(l:row, 2)
+        echom "Matched head line"
+        if s:IsUnderlined(l:row - 1)
+            echom "I am the underline"
+            call s:CompleteHeading(l:row - 1)
+        else
+            echom "I am the overline"
+            call s:CompleteHeading(l:row + 1)
+        endif
+    else
+        echom "I am the heading itself"
+        call s:CompleteHeading(l:row)
+    endif
+endfunc
+
+func! s:CompleteHeading(row)
+    let l:row = a:row
+
     if s:IsHeading(l:row)
         let l:headLen = len(getline(l:row))
 
@@ -38,13 +56,13 @@ func! s:IsHeading(row)
 endfunc
 
 func! s:IsUnderlined(row)
-    return s:MatchHeadLine(a:row + 1)
+    return len(getline(a:row)) > 0 && s:MatchHeadLine(a:row + 1, 1)
 endfunc
 
 func! s:IsOverlined(row)
-    return s:MatchHeadLine(a:row - 1)
+    return len(getline(a:row)) > 0 && s:MatchHeadLine(a:row - 1, 1)
 endfunc
 
-func! s:MatchHeadLine(row)
-    return match(getline(a:row), '^\([=#^-]\)\1*$') > -1
+func! s:MatchHeadLine(row, minLen)
+    return match(getline(a:row), '^\([=#^-]\)\1\{' . (a:minLen - 1) . ',\}$') > -1
 endfunc
