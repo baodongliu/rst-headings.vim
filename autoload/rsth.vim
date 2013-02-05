@@ -23,7 +23,7 @@ func! s:CompleteHeading(row)
     let l:row = a:row
 
     if s:IsHeading(l:row)
-        let l:headLen = len(getline(l:row))
+        let l:headLen = s:StringLength(getline(l:row))
 
         if (l:headLen < 1)
             " Avoid deletion of head lines if heading is still empty
@@ -56,13 +56,17 @@ func! s:IsHeading(row)
 endfunc
 
 func! s:IsUnderlined(row)
-    return len(getline(a:row)) > 0 && s:MatchHeadLine(a:row + 1, 1)
+    return s:StringLength(getline(a:row)) > 0 && s:MatchHeadLine(a:row + 1, 1)
 endfunc
 
 func! s:IsOverlined(row)
-    return len(getline(a:row)) > 0 && s:MatchHeadLine(a:row - 1, 1)
+    return s:StringLength(getline(a:row)) > 0 && s:MatchHeadLine(a:row - 1, 1)
 endfunc
 
 func! s:MatchHeadLine(row, minLen)
     return match(getline(a:row), '^\([=#^-]\)\1\{' . (a:minLen - 1) . ',\}$') > -1
+endfunc
+
+func! s:StringLength(text)
+    return strlen(substitute(a:text, ".", "x", "g"))
 endfunc
