@@ -40,9 +40,11 @@ func! s:CompleteHeading(row)
 
         if s:IsOverlined(l:row)
             call setline(l:row - 1, l:headLine)
+            call feedkeys("\<esc>o")
         endif
         if s:IsUnderlined(l:row) || s:IsOverlined(l:row)
             call setline(l:row + 1, l:headLine)
+            call feedkeys("\<esc>o")
         endif
     endif
 endfunc
