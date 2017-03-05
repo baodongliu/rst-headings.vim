@@ -66,7 +66,7 @@ func! s:IsOverlined(row)
 endfunc
 
 func! s:MatchHeadLine(row, minLen)
-    return match(getline(a:row), '^\([=#^-]\)\1\{' . (a:minLen - 1) . ',\}$') > -1
+    return match(getline(a:row), '^\([=#~^-]\)\1\{' . (a:minLen - 1) . ',\}$') > -1
 endfunc
 
 func! s:StringLength(text)
